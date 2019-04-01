@@ -15,6 +15,8 @@ class Queue
 	private int rear;		// rear points to last element in the queue
 	private int capacity;	// maximum capacity of the queue
 	private int count;		// current size of the queue
+	private int timeOfEachRequest;
+	private int totalTime;
 	
 	// Constructor to initialize queue
 	Queue(int size)
@@ -24,6 +26,8 @@ class Queue
 		front = 0;
 		rear = -1;
 		count = 0;
+		totalTime=0;
+		timeOfEachRequest = 2;
 	}
 
 	// Utility function to remove front element from the queue
@@ -32,11 +36,13 @@ class Queue
 		// check for queue underflow
 		if (isEmpty())
 		{
-			System.out.println("UnderFlow\nProgram Terminated");
+			System.out.println("Queue is Empty");
 			System.exit(1);
 		}
+		totalTime = timeOfEachRequest * arr[front];
 
-		System.out.println("Removing " + arr[front]);
+		System.out.println("The number of operation process for first person in the line was " + arr[front]+" operation");
+                System.out.println("it took " + timeOfEachRequest * arr[front] +" minute to process");
 
 		front = (front + 1) % capacity;
 		count--;
@@ -87,25 +93,43 @@ class Queue
 	{
 		return (size() == capacity);
 	}
+	public int getTotalTime(){
+		return totalTime;
+	}
 	
 	// main function
 	public static void main (String[] args)
 	{
 		// create a queue of capacity 5
 		Queue q = new Queue(5);
-
-		q.enqueue(1);
-		q.enqueue(2);
-		q.enqueue(3);
-		
-		System.out.println("Front element is: " + q.peek());
-		q.dequeue();
-		System.out.println("Front element is: " + q.peek());
-
-		System.out.println("Main size is " + q.size());
-
-		q.dequeue();
-		q.dequeue();
+		Scanner input = new Scanner(Sytem.in);
+		boolean bool = true;
+		int person = 1;
+		 do{
+                       System.out.println("Enter A to add a person to the line \n"
+                        + "Enter N to process the line \n"
+                        + "Enter Q to quit");
+                       
+                       System.out.println("-------------------------------------");
+                     char c = input.next().charAt(0);
+                             if(c =='A'){
+                                 System.out.println("How many operation(in integer) do this person on the line number "+person +" need");
+                                 int x = input.nextInt();
+                                 q.enqueue(x);
+                             }
+                             else if(c=='N'){
+                                 System.out.println("Line is being processed");
+                                 
+                                 q.dequeue();
+                             }
+                             else if(c == 'Q'){
+                                 bool = false;
+                             }
+                         person++;
+                  }while(bool);
+                  
+                  System.out.println("The total time of the simulation is " + q.getTotalTime()+ " minutes");
+                  System.out.println("The number of people in the line is " + q.size());
 		
 		if (q.isEmpty())
 			System.out.println("Queue Is Empty");
